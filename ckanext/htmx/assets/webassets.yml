@@ -1,0 +1,14 @@
+js:
+  output: ckanext-htmx/%(version)s-htmx.js
+  contents:
+    - htmx.min.js
+  extra:
+    preload:
+      - base/main
+htmx-csrf:
+  output: ckanext-htmx/%(version)s-htmx-csrf.js
+  contents:
+    - htmx-csrf.js
+  extra:
+    preload:
+      - base/main

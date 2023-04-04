@@ -1,0 +1,19 @@
+{% extends "page.html" %}
+
+<div id="search-content" data-module="htmx-module">
+  {% block primary_content %}
+  <br>
+  <div class="input-group mb-3">
+    <span class="input-group-text" id="inputGroup-sizing-default">Search Datasets:</span>
+    <input type="search" class="form-control" name="search" placeholder="Begin Typing To Search Users..." 
+           hx-get="/htmx/search" 
+           hx-trigger="keyup changed delay:500ms, search" 
+           hx-target="#search-results"
+           hx-push-url="true">
+  </div>
+  <br>
+  <div id="search-results">
+    {% snippet 'snippets/package_list.html', packages=packages %}
+  </div>
+  {% endblock%}
+</div>
