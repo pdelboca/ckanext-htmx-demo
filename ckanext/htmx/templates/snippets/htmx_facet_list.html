@@ -2,7 +2,7 @@
 {% set current_url = request.url %}
 
 <div class="list-group">
-  <li class="list-group-item list-group-item-primary"><strong>{{ facet["title"]|title }}</strong></li>
+  <li class="list-group-item list-group-item-success"><strong>{{ facet["title"]|title }}</strong></li>
   {% for item in facet["items"][:5] %}
     {% set new_url, active = h.add_param_or_remove_it_if_exist(current_url, facet_name, item["name"]) %}
     <a href="{{ new_url }}" class="list-group-item list-group-item-action {% if active %}active{%endif%}" hx-get="{{new_url}}" hx-target="#search-content" hx-swap="outerHTML" hx-push-url="true">
