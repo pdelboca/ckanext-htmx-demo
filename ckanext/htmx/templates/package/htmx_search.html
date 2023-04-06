@@ -1,0 +1,56 @@
+<div id="search-content" style="display:flex; margin:auto; justify-content: center; width: 75%;">
+{% set sorting = [
+(_('Relevance'), 'score desc, metadata_modified desc'),
+(_('Name Ascending'), 'title_string asc'),
+(_('Name Descending'), 'title_string desc'),
+(_('Last Modified'), 'metadata_modified desc'),
+(_('Popular'), 'views_recent desc') if g.tracking_enabled else (false, false) ]
+%}
+{% set sorting_selected = h.get_request_param('sort') or 'score desc, metadata_modified desc' %}
+{% set q = h.get_request_param('q') or '' %}
+
+{# the following urls are gonna be set in hx-get attributes so hx-push-url does not repeat params. (Bug? Fix?) #}
+{% set htmx_search_url = h.remove_param_if_exist(request.url, 'q', q) %}
+{% set htmx_sort_url = h.remove_param_if_exist(request.url, 'sort', sorting_selected) %}
+
+{% block secondary_content %}
+<div style="width: 30%;">
+  <div class="filters">
+    <div>
+      {% for facet in search_facets %}
+        {{ h.snippet('snippets/htmx_facet_list.html', facet=search_facets[facet]) }}
+      {% endfor %}
+    </div>
+    <a class="close no-text hide-filters"><i class="fa fa-times-circle"></i><span class="text">close</span></a>
+  </div>
+</div>
+{% endblock %}
+
+{% block primary_content %}
+<div style="width: 70%;">
+  <br>
+  <div class="input-group mb-3">
+    <span class="input-group-text">Search Datasets:</span>
+    <input type="search" class="form-control" name="q" value="{{q}}" placeholder="Begin Typing To Search Users..."
+      hx-get="{{htmx_search_url}}" hx-trigger="keyup changed delay:500ms, search" hx-target="#search-content"
+      hx-swap="outerHTML" hx-push-url="true">
+  </div>
+  <div class="form-group">
+    <label for="field-order-by">{{ _('Order by') }}</label>
+    <select id="field-order-by" name="sort" class="form-control form-select" hx-get="{{htmx_sort_url}}"
+      hx-target="#search-content" hx-swap="outerHTML" hx-push-url="true">
+      {% for label, value in sorting %}
+      {% if label and value %}
+      <option value="{{ value }}" {% if sorting_selected==value %} selected="selected" {% endif %}>{{ label }}
+      </option>
+      {% endif %}
+      {% endfor %}
+    </select>
+  </div>
+  <br>
+  <div id="search-results">
+    {% snippet 'snippets/package_list.html', packages=packages %}
+  </div>
+</div>
+{% endblock%}
+</div>
