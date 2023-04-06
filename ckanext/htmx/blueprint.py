@@ -23,10 +23,10 @@ def search():
         'extras': details['search_extras'],
     }
     results = toolkit.get_action('package_search')(context, data_dict)
-
     extra_vars = {
         "packages": results["results"],
         "search_facets": results["search_facets"],
+        "count": results["count"],
     }
     if toolkit.request.headers.get('HX-Request') == 'true':
         return toolkit.render('package/htmx_search.html', extra_vars=extra_vars)

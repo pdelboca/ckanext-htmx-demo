@@ -2,5 +2,5 @@
 
 {% block content %}
     {# CKAN does not provide a single block for primary_block and secondary_block. #}
-    {% snippet "package/htmx_search.html", packages=packages, search_facets=search_facets %}
+    {% snippet "package/htmx_search.html", packages=packages, search_facets=search_facets, count=count %}
 {% endblock %}
