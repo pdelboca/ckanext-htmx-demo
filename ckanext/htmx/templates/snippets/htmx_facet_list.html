@@ -1,25 +1,30 @@
 {% set facet_name = facet.title %}
 {% set current_url = request.url %}
 
-<div class="list-group">
+<div id="{{facet_name}}" class="list-group">
   <li class="list-group-item list-group-item-success"><strong>{{ facet["title"]|title }}</strong></li>
   {% for item in facet["items"][:5] %}
-    {% set new_url, active = h.add_param_or_remove_it_if_exist(current_url, facet_name, item["name"]) %}
-    <a href="{{ new_url }}" class="list-group-item list-group-item-action {% if active %}active{%endif%}" hx-get="{{new_url}}" hx-target="#search-content" hx-swap="outerHTML" hx-push-url="true">
-      {{ item["display_name"] | truncate(25) }}
-      <span class="badge bg-primary rounded-pill">{{ item["count"] }}</span>
-    </a>
+  {% set new_url, active = h.add_param_or_remove_it_if_exist(current_url, facet_name, item["name"]) %}
+  <a href="{{ new_url }}" class="list-group-item list-group-item-action {% if active %}active{%endif%}"
+    hx-get="{{new_url}}" hx-target="#search-content" hx-swap="outerHTML" hx-push-url="true">
+    {{ item["display_name"] | truncate(25) }}
+    <span class="badge bg-primary rounded-pill">{{ item["count"] }}</span>
+  </a>
   {% endfor %}
+  {% if facet["items"]|length > 5 %}
   <div class="collapse" id="more-facets-{{facet_name}}">
     {% for item in facet["items"][5:] %}
     {% set new_url, active = h.add_param_or_remove_it_if_exist(current_url, facet_name, item["name"]) %}
-    <a href="{{ new_url }}" class="list-group-item list-group-item-action {% if active %}active{%endif%}" hx-get="{{new_url}}" hx-target="#search-content" hx-swap="outerHTML" hx-push-url="true">
+    <a href="{{ new_url }}" class="list-group-item list-group-item-action {% if active %}active{%endif%}"
+      hx-get="{{new_url}}" hx-target="#search-content" hx-swap="outerHTML" hx-push-url="true">
       {{ item["display_name"] | truncate(25) }}
       <span class="badge bg-primary rounded-pill">{{ item["count"] }}</span>
     </a>
-  {% endfor %}
+    {% endfor %}
   </div>
-  <button class="list-group-item list-group-item-action list-group-item-light" data-bs-toggle="collapse" data-bs-target="#more-facets-{{facet_name}}">
-    <strong>Show all</strong>
+  <button class="list-group-item list-group-item-action list-group-item-light" data-bs-toggle="collapse"
+    data-bs-target="#more-facets-{{facet_name}}">
+    <strong>Show more...</strong>
   </button>
+  {% endif %}
 </div>
