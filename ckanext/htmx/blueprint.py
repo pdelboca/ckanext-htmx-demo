@@ -9,6 +9,15 @@ htmx = Blueprint('htmx', __name__)
 
 @htmx.route('/htmx/search/')
 def search():
+    """This view implements the faceted search functionality.
+    
+    The main difference between faceted views and the traditional HTMX examples is that,
+    in addition to the search results, that will traditionally be replaced in some div
+    element, we also need to return the updated facets. This means that the "replaceable
+    element" should include not only the search results, but also the facets. This faces 
+    no complication, the only downside is that the bigger template returned the less
+    reusable it will be. 
+    """
     context = {}
     q = toolkit.request.args.get('q', '*:*')
     sort = toolkit.request.args.get(u'sort', None)
